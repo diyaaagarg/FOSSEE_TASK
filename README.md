@@ -330,6 +330,20 @@ This project is licensed under the same license as the original FOSSEE Workshop 
 
 *This UI/UX transformation represents a commitment to providing the best possible experience for students and educators using the FOSSEE Workshop Booking System.*
 
+##-------------------------------------------------------------------------------------------
+## Screenshots(OLD)
+
+### Login Page
+![Login Page](images/Old_homePage.png)
+
+### Sign Up
+![Sign Up](images/old_SignUppage.png)
+![Sign Up](images/old_SignUpRest.png)
+
+### Statistics
+![Statistics](images/old_Statistics.png)
+##-------------------------------------------------------------------------------------------
+
 ## Screenshots(NEW)->CHANGE MADE BY ME
 
 ### Login Page
@@ -342,4 +356,6 @@ This project is licensed under the same license as the original FOSSEE Workshop 
 ![Statistics](images/new_Statistics.png)
 ![chart](images/new_Chart.png)
 ![Workshop Chart](images/new_WorkshopStatistics.png)
+
+
 
