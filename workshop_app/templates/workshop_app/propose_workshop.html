@@ -48,59 +48,302 @@
 
 
 {% block content %}
-    <style type="text/css">
-        .errorlist {
-            color: red;
-        }
-
-    .modal-open .modal{
-        overflow-y: hidden;
-    }
-    </style>
-
-    <div class="container" align="center">
-        <div class="alert alert-info">
-            Note: Before proposing the workshop, please check about the workshop in the
-            <strong>Workshop Types</strong> section
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header animate-fadeInUp">
+            <div class="header-content">
+                <h1 class="page-title">
+                    <span class="title-icon">🚀</span>
+                    Propose Workshop
+                </h1>
+                <p class="page-subtitle">Submit your workshop proposal and get started with FOSSEE</p>
+            </div>
         </div>
-        <br><br>
-        <div class="col-md-6 col-md-offset-6">
-            <div class="card border-primary">
-                <div class="card-header">
-                    <h3>Propose Workshop</h3>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <form method="post">
+
+        <!-- Info Alert -->
+        <div class="alert alert-info animate-fadeInUp" style="animation-delay: 0.1s">
+            <div class="alert-icon">
+                <span class="material-icons">info</span>
+            </div>
+            <div class="alert-content">
+                <strong>Important:</strong> Before proposing the workshop, please check about the workshop in the 
+                <a href="{% url 'workshop_app:workshop_type_list' %}" class="alert-link">Workshop Types</a> section
+            </div>
+        </div>
+
+        <!-- Proposal Form -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card proposal-card animate-fadeInUp" style="animation-delay: 0.2s">
+                    <div class="card-header">
+                        <div class="form-icon">
+                            <span class="material-icons">edit_note</span>
+                        </div>
+                        <h3 class="form-title">Workshop Proposal Form</h3>
+                        <p class="form-subtitle">Fill in the details to propose your workshop</p>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" class="proposal-form">
                             {% csrf_token %}
-                            <br/>
-                            {{ form.workshop_type }}
-                            <br>
-                            {{ form.date }}
-                            <br>
-                            {{ form.tnc_accepted }} I accept the
-                            <a href="#" id="disp_tnc" data-toggle="modal"
-                            data-target="#exampleModalCenter">
-                                terms and conditions
-                            </a>
-                            <br>
+                            
                             {% if form.errors %}
-                                <br>
-                                <div style="text-align: left; border: 1px solid red; padding-top: 5px">
-                                    <h5 style="text-align: center; color: red; font-weight: bolder">Errors</h5>
-                                    {{ form.errors }}
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <div class="alert-icon">
+                                        <span class="material-icons">error</span>
+                                    </div>
+                                    <div class="alert-content">
+                                        <h5 class="alert-title">Please correct the following errors:</h5>
+                                        <ul class="error-list">
+                                            {% for field in form %}
+                                                {% for error in field.errors %}
+                                                    <li class="error-item">{{ error|escape }}</li>
+                                                {% endfor %}
+                                            {% endfor %}
+                                            {% for error in form.non_field_errors %}
+                                                <li class="error-item">{{ error|escape }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+                                        <span class="material-icons">close</span>
+                                    </button>
                                 </div>
                             {% endif %}
-                            <br>
-                            <button class="btn btn-success" type="submit">Submit</button>
+                            
+                            <div class="form-group">
+                                <label for="id_workshop_type" class="form-label">
+                                    <span class="material-icons">category</span>
+                                    Workshop Type
+                                </label>
+                                <div class="input-wrapper">
+                                    {{ form.workshop_type }}
+                                    <span class="input-icon">
+                                        <span class="material-icons">school</span>
+                                    </span>
+                                </div>
+                                <small class="form-text">Select the type of workshop you want to propose</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="id_date" class="form-label">
+                                    <span class="material-icons">event</span>
+                                    Preferred Date
+                                </label>
+                                <div class="input-wrapper">
+                                    {{ form.date }}
+                                    <span class="input-icon">
+                                        <span class="material-icons">calendar_today</span>
+                                    </span>
+                                </div>
+                                <small class="form-text">Choose your preferred date for the workshop (minimum 3 days from today)</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="checkbox-wrapper">
+                                    <div class="custom-checkbox">
+                                        {{ form.tnc_accepted }}
+                                        <label for="id_tnc_accepted" class="checkbox-label">
+                                            <span class="checkbox-text">
+                                                I accept the 
+                                                <a href="#" id="disp_tnc" data-toggle="modal" data-target="#exampleModalCenter" class="terms-link">
+                                                    terms and conditions
+                                                </a>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success btn-submit">
+                                    <span class="btn-text">Submit Proposal</span>
+                                    <span class="btn-icon">
+                                        <span class="material-icons">send</span>
+                                    </span>
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-        <br>
-
     </div>
+
+    <style>
+        .proposal-card {
+            border: none;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .form-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-md);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .form-icon .material-icons {
+            font-size: 2rem;
+            color: var(--white);
+        }
+        
+        .form-title {
+            color: var(--white);
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.75rem;
+            text-align: center;
+        }
+        
+        .form-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        .proposal-form {
+            padding: var(--spacing-lg) 0;
+        }
+        
+        .form-label {
+            display: flex;
+            align-items: center;
+            color: var(--white);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .form-label .material-icons {
+            margin-right: var(--spacing-sm);
+            font-size: 1.2rem;
+        }
+        
+        .input-wrapper {
+            position: relative;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .input-wrapper .form-control {
+            padding-left: 3rem;
+            padding-right: 1rem;
+            height: 50px;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+        }
+        
+        .form-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+            margin-top: var(--spacing-xs);
+        }
+        
+        .checkbox-wrapper {
+            margin: var(--spacing-lg) 0;
+        }
+        
+        .custom-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+        
+        .custom-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .checkbox-label {
+            color: var(--white);
+            font-size: 1rem;
+            line-height: 1.5;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .terms-link {
+            color: var(--accent-gradient);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-normal);
+        }
+        
+        .terms-link:hover {
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .form-actions {
+            margin-top: var(--spacing-xl);
+            text-align: center;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            max-width: 300px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            font-size: 1.1rem;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-submit:hover .btn-icon {
+            transform: translateX(5px);
+        }
+        
+        .alert-link {
+            color: var(--accent-gradient);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .alert-link:hover {
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .alert-title {
+            color: var(--white);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .error-list {
+            margin: 0;
+            padding-left: var(--spacing-lg);
+        }
+        
+        .error-item {
+            color: var(--white);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .error-item:last-child {
+            margin-bottom: 0;
+        }
+    </style>
     <!-- Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

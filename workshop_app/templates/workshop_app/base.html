@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 {% load static %}
 {% load custom_filters %}
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="FOSSEE Workshop Booking System - Book and manage workshops with ease">
+    <meta name="keywords" content="workshop, booking, FOSSEE, education, training">
+    <meta name="author" content="FOSSEE, IIT Bombay">
+    
     <title>
         {% block title %}
-            HomePage
+            FOSSEE Workshop Booking System
         {% endblock %}
     </title>
 
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="{% static 'workshop_app/css/modern-ui.css' %}" as="style">
+    
+    <!-- External Dependencies -->
     <script src="{% static 'workshop_app/js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'workshop_app/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'workshop_app/js/popper.min.js' %}"></script>
@@ -17,95 +27,150 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-
     {% block extra-dependencies %}
     {% endblock %}
 
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{% static 'workshop_app/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'workshop_app/css/toastr.min.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'workshop_app/css/base.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'workshop_app/css/font-awesome.css' %}" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    
+    <!-- Modern UI Framework -->
+    <link rel="stylesheet" href="{% static 'workshop_app/css/modern-ui.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'workshop_app/css/animations.css' %}" type="text/css"/>
+    
+    <!-- Modern Interactions -->
+    <script src="{% static 'workshop_app/js/modern-interactions.js' %}"></script>
 
     {% block extra-custom-scripts %}
     {% endblock %}
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 </head>
 
 <body>
 {% block header %}
-    <nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
-        {% if user.is_authenticated %}
-        <a class="navbar-brand text-white" href="{% url 'workshop_app:index' %}">FOSSEE Workshops</a>
-        {% else %}
-        <a class="navbar-brand text-white" href="{{request.scheme}}://{{request.get_host}}">FOSSEE Workshops</a>
-        {% endif %}
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/">
-                        Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'statistics_app:public' %}">
-                        Workshop Statistics
-                    </a>
-                </li>
-            </ul>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
             {% if user.is_authenticated %}
-            <ul class="navbar-nav mr-auto">
-                {% if request.user|has_group:"instructor" %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'statistics_app:team' %}">
-                        Team Statistics
-                    </a>
-                </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'workshop_app:workshop_status_instructor' %}">
-                        Workshop Status
-                    </a>
-                </li>
-                {% if not request.user|has_group:"instructor" %}
+            <a class="navbar-brand" href="{% url 'workshop_app:index' %}">
+                <span class="brand-icon">🎓</span>
+                <span class="brand-text">FOSSEE Workshops</span>
+            </a>
+            {% else %}
+            <a class="navbar-brand" href="{{request.scheme}}://{{request.get_host}}">
+                <span class="brand-icon">🎓</span>
+                <span class="brand-text">FOSSEE Workshops</span>
+            </a>
+            {% endif %}
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{% url 'workshop_app:propose_workshop' %}">
-                            Propose Workshop
+                        <a class="nav-link" href="/">
+                            <span class="material-icons">home</span>
+                            <span class="nav-text">Home</span>
                         </a>
                     </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'workshop_app:workshop_type_list' %}">
-                        Workshop Types
-                    </a>
-                </li>
-            </ul>
-            <div class="my-2 my-lg-0">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           <span class="material-icons" style="vertical-align: middle">account_circle</span>
-                            <p style="display: inline; vertical-align: middle">
-                                {{user.get_full_name|title}}
-                            </p>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'statistics_app:public' %}">
+                            <span class="material-icons">analytics</span>
+                            <span class="nav-text">Statistics</span>
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'workshop_app:view_own_profile' %}">Profile</a>
-                            <a class="dropdown-item" href="{% url 'password_change' %}">
-                                 Change Password
-                            </a>
-                            <a class="dropdown-item" href="{% url 'workshop_app:logout' %}">Logout</a>
-                        </div>
                     </li>
                 </ul>
+                
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav me-auto">
+                    {% if request.user|has_group:"instructor" %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'statistics_app:team' %}">
+                            <span class="material-icons">group</span>
+                            <span class="nav-text">Team Stats</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'workshop_app:workshop_status_instructor' %}">
+                            <span class="material-icons">assignment</span>
+                            <span class="nav-text">Workshop Status</span>
+                        </a>
+                    </li>
+                    {% if not request.user|has_group:"instructor" %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'workshop_app:propose_workshop' %}">
+                            <span class="material-icons">add_circle</span>
+                            <span class="nav-text">Propose Workshop</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'workshop_app:workshop_type_list' %}">
+                            <span class="material-icons">category</span>
+                            <span class="nav-text">Workshop Types</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle user-profile" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="user-avatar">
+                                <span class="material-icons">account_circle</span>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name">{{user.get_full_name|title}}</span>
+                                <span class="user-role">
+                                    {% if request.user|has_group:"instructor" %}Instructor{% else %}Coordinator{% endif %}
+                                </span>
+                            </div>
+                            <span class="material-icons dropdown-arrow">keyboard_arrow_down</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'workshop_app:view_own_profile' %}">
+                                <span class="material-icons">person</span>
+                                <span>Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="{% url 'password_change' %}">
+                                <span class="material-icons">lock</span>
+                                <span>Change Password</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'workshop_app:logout' %}">
+                                <span class="material-icons">logout</span>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="navbar-nav">
+                    <a class="nav-link" href="{% url 'workshop_app:register' %}">
+                        <span class="material-icons">person_add</span>
+                        <span class="nav-text">Sign Up</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'workshop_app:login' %}">
+                        <span class="material-icons">login</span>
+                        <span class="nav-text">Login</span>
+                    </a>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </nav>
 {% endblock %}
@@ -119,7 +184,7 @@
 <script>
     {% if messages %}
         {% for message in messages %}
-            toastr[{% if message.tags %} "{{ message.tags }}" {% else %} "info" {% endif %}]("{{ message }}");
+            toastr[{% if message.tags %}"{{ message.tags }}"{% else %}"info"{% endif %}]("{{ message|escapejs }}");
         {% endfor %}
     {% endif %}
 </script>

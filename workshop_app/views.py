@@ -80,12 +80,15 @@ def user_login(request):
     if request.method == "POST":
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            user = form.cleaned_data
-            if user.profile.is_email_verified:
+            # Get the authenticated user from the form's cleaned_data
+            user = form.cleaned_data.get('authenticated_user')
+            if user and user.profile.is_email_verified:
                 login(request, user)
                 return redirect(get_landing_page(user))
-            else:
+            elif user and not user.profile.is_email_verified:
                 return render(request, 'workshop_app/activation.html')
+            else:
+                return render(request, 'workshop_app/login.html', {"form": form})
         else:
             return render(request, 'workshop_app/login.html', {"form": form})
     else:

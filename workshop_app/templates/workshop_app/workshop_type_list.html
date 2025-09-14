@@ -1,42 +1,72 @@
 {% extends 'workshop_app/base.html' %}
 {% load custom_filters %}
 {% block title %}
-	View List of available Workshops
+	Workshop Types - FOSSEE Workshop Booking
 {% endblock %}
 
 {% block content %}
     <div class="container">
-    <h2 class="text-center">Workshop Types</h2>
-    <br>
-    {% if request.user|has_group:"instructor" %}
-        <a href="{% url 'workshop_app:add_workshop_type' %}">
-        <button class="btn btn-md btn-primary float-right mb-3 mx-4">Add Workshop Type</button>
-        </a>
-        <br>
-    {% endif %}
-	<div class="container">
-		<table class="table table-hover">
-		  <thead>
-		    <tr>
-		      <th>Sr No</th>
-		      <th>Workshop Name</th>
-		      <th>Workshop Duration (Days)</th>
-		      <th>Action</th>
-		    </tr>
-		  </thead>
+        <!-- Page Header -->
+        <div class="page-header animate-fadeInUp">
+            <div class="header-content">
+                <h1 class="page-title">
+                    <span class="title-icon">📚</span>
+                    Workshop Types
+                </h1>
+                <p class="page-subtitle">Explore our comprehensive collection of educational workshops</p>
+            </div>
+            
+            {% if request.user|has_group:"instructor" %}
+            <div class="header-actions">
+                <a href="{% url 'workshop_app:add_workshop_type' %}" class="btn btn-primary btn-add">
+                    <span class="material-icons">add</span>
+                    <span>Add Workshop Type</span>
+                </a>
+            </div>
+            {% endif %}
+        </div>
 
-		{% for w in workshop_type %}
-		  <tbody>
-		    <tr  >
-		      <td scope="row" id="{{ forloop.counter }}">{{ forloop.counter }}</td>
-		      <td>{{ w.name }}</td>
-		      <td>{{ w.duration }}</td>
-		      <td><a href="{% url 'workshop_app:workshop_type_details' w.id %}" class="btn btn-outline-info" class="accordion-toggle" >View Workshop Details</a></td>
-		    </tr>
-		  </tbody>
-		 {% endfor %}
-		</table>
-	</div>
+        <!-- Workshop Types Grid -->
+        <div class="workshop-grid">
+            {% for w in workshop_type %}
+            <div class="workshop-card animate-fadeInUp" style="animation-delay: {{ forloop.counter0|add:0.1 }}s">
+                <div class="card-header">
+                    <div class="workshop-number">{{ forloop.counter }}</div>
+                    <div class="workshop-icon">
+                        <span class="material-icons">school</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3 class="workshop-name">{{ w.name }}</h3>
+                    <div class="workshop-duration">
+                        <span class="duration-icon">
+                            <span class="material-icons">schedule</span>
+                        </span>
+                        <span class="duration-text">{{ w.duration }} Days</span>
+                    </div>
+                    <div class="workshop-description">
+                        <p>Comprehensive workshop covering all essential topics and hands-on learning experiences.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'workshop_app:workshop_type_details' w.id %}" class="btn btn-outline-info btn-details">
+                        <span class="btn-text">View Details</span>
+                        <span class="btn-icon">
+                            <span class="material-icons">arrow_forward</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state animate-fadeInUp">
+                <div class="empty-icon">
+                    <span class="material-icons">school</span>
+                </div>
+                <h3>No Workshop Types Available</h3>
+                <p>There are currently no workshop types to display. Check back later or contact an administrator.</p>
+            </div>
+            {% endfor %}
+        </div>
 
 	    <!-- The Modal -->
 	    <div id="mailModal" class="modal">

@@ -115,14 +115,24 @@ class UserLoginForm(forms.Form):
     def clean(self):
         super(UserLoginForm, self).clean()
         try:
-            u_name, pwd = self.cleaned_data["username"], \
-                          self.cleaned_data["password"]
+            u_name = self.cleaned_data.get("username")
+            pwd = self.cleaned_data.get("password")
+            
+            if not u_name or not pwd:
+                raise forms.ValidationError("Username and/or Password is not entered")
+            
             user = authenticate(username=u_name, password=pwd)
-        except Exception:
-            raise forms.ValidationError("Username and/or Password is not entered")
-        if not user:
-            raise forms.ValidationError("Invalid username/password")
-        return user
+            if not user:
+                raise forms.ValidationError("Invalid username/password")
+            
+            # Store the authenticated user in cleaned_data for the view to access
+            self.cleaned_data['authenticated_user'] = user
+            return self.cleaned_data
+        except Exception as e:
+            if isinstance(e, forms.ValidationError):
+                raise e
+            else:
+                raise forms.ValidationError("Username and/or Password is not entered")
 
 
 class WorkshopForm(forms.ModelForm):
