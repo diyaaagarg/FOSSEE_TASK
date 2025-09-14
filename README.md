@@ -334,7 +334,7 @@ This project is licensed under the same license as the original FOSSEE Workshop 
 ## Screenshots(OLD)
 
 ### Login Page
-![Login Page](images/Old_homePage.png)
+![Login Page](images/Old_HomePage.png)
 
 ### Sign Up
 ![Sign Up](images/old_SignUppage.png)
