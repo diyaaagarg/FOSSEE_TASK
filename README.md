@@ -354,7 +354,7 @@ This project is licensed under the same license as the original FOSSEE Workshop 
 
 ### Statistics
 ![Statistics](images/new_Statistics.png)
-![chart](images/new_Chart.png)
+![chart](images/newChart.png)
 ![Workshop Chart](images/new_WorkshopStatistics.png)
 
 
